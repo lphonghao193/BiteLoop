@@ -24,6 +24,8 @@ independently deployed microservices. See [docs/DOCKER.md](./docs/DOCKER.md) for
 the architecture classification and containerized development workflow.
 Development progress is tracked in
 [docs/IMPLEMENTATION_CHECKLIST.md](./docs/IMPLEMENTATION_CHECKLIST.md).
+The navigable UI scope and remaining implementation work are mapped in
+[docs/PROTOTYPE.md](./docs/PROTOTYPE.md).
 
 ## Prerequisites
 

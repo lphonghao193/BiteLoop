@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { colors, space } from '@/theme';
 
@@ -21,6 +22,7 @@ const moments = [
 ];
 
 export default function LoopScreen() {
+  const router = useRouter();
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -29,10 +31,10 @@ export default function LoopScreen() {
             <Text style={styles.eyebrow}>YOUR PEOPLE</Text>
             <Text style={styles.title}>The Loop</Text>
           </View>
-          <View style={styles.journalButton}>
+          <Pressable onPress={() => router.push('/profile')} style={styles.journalButton}>
             <Ionicons color={colors.ink} name="bookmark-outline" size={19} />
             <Text style={styles.journalLabel}>My bites</Text>
-          </View>
+          </Pressable>
         </View>
 
         <Text style={styles.subtitle}>Food moments from friends you trust—not a popularity contest.</Text>

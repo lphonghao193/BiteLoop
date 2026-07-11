@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { DEFAULT_CURRENCY, priceBandsByCurrency } from '@/features/pricing/price-bands';
 import { colors, space } from '@/theme';
 
 export default function PickScreen() {
+  const router = useRouter();
   const [selected, setSelected] = useState<string[]>([]);
   const bands = priceBandsByCurrency[DEFAULT_CURRENCY];
 
@@ -46,6 +48,10 @@ export default function PickScreen() {
           <Ionicons color={colors.surface} name="shuffle" size={21} />
           <Text style={styles.primaryButtonText}>Pick for me</Text>
         </Pressable>
+        <Pressable onPress={() => router.push('/group-decision')} style={styles.groupButton}>
+          <Ionicons color={colors.ink} name="people-outline" size={20} />
+          <Text style={styles.groupButtonText}>Decide with a group</Text>
+        </Pressable>
       </View>
       </ScrollView>
     </SafeAreaView>
@@ -68,4 +74,6 @@ const styles = StyleSheet.create({
   chipTextActive: { color: colors.primary },
   primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 16, flexDirection: 'row', gap: space.sm, justifyContent: 'center', marginTop: space.sm, padding: space.md },
   primaryButtonText: { color: colors.surface, fontSize: 17, fontWeight: '800' },
+  groupButton: { alignItems: 'center', backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: space.sm, justifyContent: 'center', minHeight: 52 },
+  groupButtonText: { color: colors.ink, fontSize: 15, fontWeight: '800' },
 });

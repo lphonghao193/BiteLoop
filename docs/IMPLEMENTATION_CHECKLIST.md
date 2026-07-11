@@ -68,6 +68,24 @@ configured.
 
 Do not begin authentication until all Section 0 exit criteria pass.
 
+## 0A. Interactive product prototype
+
+- [x] Reduce navigation to Loop, Capture, and Decide.
+- [x] Make Capture the default home destination.
+- [x] Add embedded in-app camera UI with flash, shutter, and physical-lens-aware
+  0.5×, 1×, 2×, and 4× controls.
+- [x] Prototype login with email, Apple, and Google choices.
+- [x] Prototype profile, Journal, favorites, map, and Taste Passport entry points.
+- [x] Prototype settings, currency, privacy, and notifications.
+- [x] Prototype restaurant branch search and map results.
+- [x] Prototype menu item, exact price, categories, and audience selection.
+- [x] Prototype the full structured review form.
+- [x] Prototype private circles and invitation UI.
+- [x] Prototype individual and group food decisions.
+- [ ] Validate every prototype route on a physical iPhone.
+- [ ] Add loading, empty, permission-denied, and error states to every data flow.
+- [ ] Review and approve the scope matrix in `docs/PROTOTYPE.md`.
+
 ## 1. Authentication and profiles
 
 - [ ] Install the Supabase JavaScript client and secure-storage dependency.

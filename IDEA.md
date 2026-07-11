@@ -96,11 +96,17 @@ A check-in can contain:
 
 The expected flow is:
 
-1. Take or upload a photo.
+1. Take a photo in BiteLoop's embedded camera or choose one from the library.
 2. Select a nearby restaurant or add a missing location.
 3. Select items from the menu or create a missing item.
 4. Add categories and complete a quick review.
 5. Choose the audience and publish.
+
+The embedded camera keeps users inside the check-in flow. On iOS it exposes
+available physical lenses and presents 0.5×, 1×, 2×, and 4× choices where the
+device can support them. Unsupported lens factors are disabled instead of
+pretending that digital cropping is an optical lens. Flash, shutter, retake, and
+photo-library access remain reachable with minimal controls over the preview.
 
 ### 3. Restaurant locations and community menus
 

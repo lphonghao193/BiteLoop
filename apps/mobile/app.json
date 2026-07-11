@@ -24,6 +24,14 @@
     "plugins": [
       "expo-router",
       [
+        "expo-camera",
+        {
+          "cameraPermission": "BiteLoop uses your camera so you can capture food moments without leaving the app.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
         "expo-image-picker",
         {
           "photosPermission": "BiteLoop uses your photos so you can add food moments to your journal.",
