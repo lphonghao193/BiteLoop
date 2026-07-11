@@ -40,7 +40,7 @@ export default function LoopScreen() {
         <Text style={styles.subtitle}>Food moments from friends you trust—not a popularity contest.</Text>
 
         {moments.map((moment) => (
-          <View key={`${moment.author}-${moment.dish}`} style={styles.card}>
+          <Pressable key={`${moment.author}-${moment.dish}`} onPress={() => router.push('/dish')} style={styles.card}>
             <View style={[styles.photoPlaceholder, { backgroundColor: moment.color }]}>
               <Ionicons color="rgba(42,33,28,0.45)" name="restaurant" size={44} />
             </View>
@@ -57,7 +57,7 @@ export default function LoopScreen() {
                 <Ionicons color={colors.muted} name="paper-plane-outline" size={19} />
               </View>
             </View>
-          </View>
+          </Pressable>
         ))}
       </ScrollView>
     </SafeAreaView>

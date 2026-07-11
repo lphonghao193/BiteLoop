@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { DEFAULT_CURRENCY, priceBandsByCurrency } from '@/features/pricing/price-bands';
@@ -9,71 +9,31 @@ import { colors, space } from '@/theme';
 export default function PickScreen() {
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>([]);
+  const [showResult, setShowResult] = useState(false);
   const bands = priceBandsByCurrency[DEFAULT_CURRENCY];
+  const toggle = (id: string) => setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
 
-  const toggle = (id: string) => {
-    setSelected((current) =>
-      current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
-    );
-  };
-
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.heroIcon}><Ionicons color={colors.accent} name="sparkles" size={28} /></View>
-        <Text style={styles.title}>What should we eat?</Text>
-        <Text style={styles.subtitle}>Set a few boundaries. BiteLoop will choose one strong option and explain why.</Text>
-      <View style={styles.section}>
-        <View>
-          <Text style={styles.label}>BUDGET PER PERSON</Text>
-          <Text style={styles.hint}>VND · Select one or more ranges</Text>
-        </View>
-        <View style={styles.chips}>
-          {bands.map((band) => {
-            const active = selected.includes(band.id);
-            return (
-              <Pressable
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: active }}
-                key={band.id}
-                onPress={() => toggle(band.id)}
-                style={[styles.chip, active && styles.chipActive]}
-              >
-                <Text style={[styles.chipText, active && styles.chipTextActive]}>{band.label}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
-        <Pressable style={styles.primaryButton}>
-          <Ionicons color={colors.surface} name="shuffle" size={21} />
-          <Text style={styles.primaryButtonText}>Pick for me</Text>
-        </Pressable>
-        <Pressable onPress={() => router.push('/group-decision')} style={styles.groupButton}>
-          <Ionicons color={colors.ink} name="people-outline" size={20} />
-          <Text style={styles.groupButtonText}>Decide with a group</Text>
-        </Pressable>
+  return <SafeAreaView style={styles.safeArea}><ScrollView contentContainerStyle={styles.content}>
+    {showResult ? <>
+      <View style={styles.heroIcon}><Ionicons color={colors.accent} name="sparkles" size={28} /></View>
+      <Text style={styles.title}>Today's pick</Text>
+      <Text style={styles.subtitle}>One suitable answer, with the reasons visible.</Text>
+      <Pressable onPress={() => router.push('/dish')} style={styles.resultCard}><Text style={styles.resultEyebrow}>OPEN NOW · 8 MIN AWAY</Text><Text style={styles.resultDish}>Bún bò Huế</Text><Text style={styles.resultPlace}>Bếp Huế · District 1</Text><Text style={styles.resultReason}>Within your budget · You like savory noodles · 4 friends would order it again · Not eaten recently</Text></Pressable>
+      <Pressable style={styles.primaryButton}><Ionicons color="#FFF" name="navigate" size={21} /><Text style={styles.primaryButtonText}>Let's go</Text></Pressable>
+      <Pressable onPress={() => setShowResult(false)} style={styles.groupButton}><Ionicons color={colors.ink} name="shuffle" size={20} /><Text style={styles.groupButtonText}>Not today · Reroll</Text></Pressable>
+    </> : <>
+      <View style={styles.heroIcon}><Ionicons color={colors.accent} name="sparkles" size={28} /></View>
+      <Text style={styles.title}>What should we eat?</Text>
+      <Text style={styles.subtitle}>Set a few boundaries. BiteLoop will choose one strong option and explain why.</Text>
+      <View style={styles.section}><View><Text style={styles.label}>BUDGET PER PERSON</Text><Text style={styles.hint}>VND · Select one or more ranges</Text></View>
+        <View style={styles.chips}>{bands.map((band) => { const active = selected.includes(band.id); return <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: active }} key={band.id} onPress={() => toggle(band.id)} style={[styles.chip, active && styles.chipActive]}><Text style={[styles.chipText, active && styles.chipTextActive]}>{band.label}</Text></Pressable>; })}</View>
+        <Pressable onPress={() => setShowResult(true)} style={styles.primaryButton}><Ionicons color="#FFF" name="shuffle" size={21} /><Text style={styles.primaryButtonText}>Pick for me</Text></Pressable>
+        <Pressable onPress={() => router.push('/group-decision')} style={styles.groupButton}><Ionicons color={colors.ink} name="people-outline" size={20} /><Text style={styles.groupButtonText}>Decide with a group</Text></Pressable>
       </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+    </>}
+  </ScrollView></SafeAreaView>;
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: colors.background },
-  content: { gap: space.md, padding: space.lg, paddingBottom: space.xl },
-  heroIcon: { alignItems: 'center', backgroundColor: '#DDEFE8', borderRadius: 25, height: 50, justifyContent: 'center', width: 50 },
-  title: { color: colors.ink, fontSize: 31, fontWeight: '800' },
-  subtitle: { color: colors.muted, fontSize: 15, lineHeight: 22, marginBottom: space.sm },
-  section: { gap: space.md },
-  label: { color: colors.ink, fontSize: 13, fontWeight: '800', letterSpacing: 1 },
-  hint: { color: colors.muted, marginTop: 4 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
-  chip: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 999, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 11 },
-  chipActive: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
-  chipText: { color: colors.ink, fontWeight: '600' },
-  chipTextActive: { color: colors.primary },
-  primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 16, flexDirection: 'row', gap: space.sm, justifyContent: 'center', marginTop: space.sm, padding: space.md },
-  primaryButtonText: { color: colors.surface, fontSize: 17, fontWeight: '800' },
-  groupButton: { alignItems: 'center', backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: space.sm, justifyContent: 'center', minHeight: 52 },
-  groupButtonText: { color: colors.ink, fontSize: 15, fontWeight: '800' },
+  safeArea: { flex: 1, backgroundColor: colors.background }, content: { gap: space.md, padding: space.lg, paddingBottom: space.xl }, heroIcon: { alignItems: 'center', backgroundColor: '#DDEFE8', borderRadius: 25, height: 50, justifyContent: 'center', width: 50 }, title: { color: colors.ink, fontSize: 31, fontWeight: '800' }, subtitle: { color: colors.muted, fontSize: 15, lineHeight: 22, marginBottom: space.sm }, section: { gap: space.md }, label: { color: colors.ink, fontSize: 13, fontWeight: '800', letterSpacing: 1 }, hint: { color: colors.muted, marginTop: 4 }, chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }, chip: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 999, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 11 }, chipActive: { backgroundColor: colors.primarySoft, borderColor: colors.primary }, chipText: { color: colors.ink, fontWeight: '600' }, chipTextActive: { color: colors.primary }, primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 16, flexDirection: 'row', gap: space.sm, justifyContent: 'center', marginTop: space.sm, minHeight: 54, padding: space.md }, primaryButtonText: { color: '#FFF', fontSize: 17, fontWeight: '800' }, groupButton: { alignItems: 'center', backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 16, borderWidth: 1, flexDirection: 'row', gap: space.sm, justifyContent: 'center', minHeight: 52 }, groupButtonText: { color: colors.ink, fontSize: 15, fontWeight: '800' }, resultCard: { backgroundColor: colors.ink, borderRadius: 26, gap: 7, padding: space.lg }, resultEyebrow: { color: '#E9B89B', fontSize: 11, fontWeight: '900', letterSpacing: 1.3 }, resultDish: { color: '#FFF', fontSize: 30, fontWeight: '900', marginTop: 4 }, resultPlace: { color: '#F3E9E3', fontSize: 15, fontWeight: '700' }, resultReason: { color: '#CDBFB6', fontSize: 13, lineHeight: 20, marginTop: 9 },
 });

@@ -6,20 +6,20 @@ it does not imply persistence or production readiness.
 
 | Capability | Prototype entry | Interactive now | Implementation still required |
 | --- | --- | --- | --- |
-| Email, Apple, Google login | Profile → Sign out / Login | Form and provider buttons | Supabase Auth, OAuth credentials, Apple compliance, session storage |
-| In-app camera | Capture → Open BiteLoop camera | Live preview, flash, lens presets, shutter | Upload compression, recovery, metadata removal policy |
-| Photo library | Capture → Choose from library | Native library picker | Upload and draft persistence |
-| Check-in draft | Photo ready → Arrow | Dish, price, audience controls | Draft repository, validation, offline retry |
-| Exact restaurant branch | Check-in → Choose restaurant | Search/map/results layout | Goong adapter, PostGIS, permissions, pin corrections |
-| Menu item | Check-in → What | Name, price, categories | Menu tables, contribution moderation, freshness |
-| Structured review | Check-in → Review this dish | All core non-star metrics | Database schema, aggregation, edit history |
-| Private circles | Profile or Check-in → Circles | Audience chips and invite UI | Membership, invitation, RLS policies, realtime |
-| Loop | Loop tab | Feed cards and actions | Feed query, pagination, reactions, realtime |
-| Journal and favorites | Loop → My bites → Profile | Destination rows and summaries | Queries, maps, filters, saved state |
-| Taste profile | Profile → Taste profile | Navigation placeholder | Allergen model, hard/soft rules, onboarding |
-| Settings and currency | Profile → Settings | Currency and notification controls | Persistence, exchange rates, permissions links |
-| Individual Decide | Decide tab | Price-band selection | Eligibility query, ranking, explanation, actions |
-| Group Decide | Decide → Decide with a group | Room and result states | Invitations, private constraints, intersection, voting |
+| Email, Apple, Google login | Profile -> Sign out / Login | Form and provider buttons | Supabase Auth, OAuth credentials, Apple compliance, session storage |
+| In-app camera | Capture -> Open BiteLoop camera | Live preview, flash, lens presets, shutter | Upload compression, recovery, metadata removal policy |
+| Photo library | Capture -> Choose from library | Native library picker | Upload and draft persistence |
+| Check-in draft | Photo ready -> Arrow | Dish, price, audience controls | Draft repository, validation, offline retry |
+| Exact restaurant branch | Check-in -> Choose restaurant | Search/map/results layout | Goong adapter, PostGIS, permissions, pin corrections |
+| Menu item | Check-in -> What | Name, price, categories | Menu tables, contribution moderation, freshness |
+| Structured review | Check-in -> Review this dish | All core non-star metrics | Database schema, aggregation, edit history |
+| Private circles | Profile or Check-in -> Circles | Audience chips and invite UI | Membership, invitation, RLS policies, realtime |
+| Loop | Loop tab | Feed cards, actions, and dish details | Feed query, pagination, reactions, realtime |
+| Journal and favorites | Loop -> My bites -> Food journal | Filters, entries, empty state, dish details | Queries, maps, filters, saved state |
+| Taste profile | Profile -> Taste profile | Dislikes, allergens, diets, exclusion controls | Allergen model, hard/soft rules, onboarding |
+| Settings and currency | Profile -> Settings | Currency and notification controls | Persistence, exchange rates, permissions links |
+| Individual Decide | Decide tab | Price bands, result, explanation, reroll | Eligibility query, ranking, live hours, navigation |
+| Group Decide | Decide -> Decide with a group | Room and result states | Invitations, private constraints, intersection, voting |
 
 ## Camera zoom behavior
 
@@ -27,15 +27,15 @@ it does not imply persistence or production readiness.
 reports physical iOS lenses through `onAvailableLensesChanged` and accepts a
 specific lens through `selectedLens`.
 
-- **0.5×** selects the reported ultra-wide lens. The control is disabled when
+- **0.5x** selects the reported ultra-wide lens. The control is disabled when
   the device does not expose one.
-- **1×** selects the wide-angle lens at zero digital zoom.
-- **2×** prefers a reported telephoto lens; otherwise it applies moderate zoom
+- **1x** selects the wide-angle lens at zero digital zoom.
+- **2x** prefers a reported telephoto lens; otherwise it applies moderate zoom
   to the wide lens.
-- **4×** uses the selected telephoto/wide lens plus normalized camera zoom.
+- **4x** uses the selected telephoto/wide lens plus normalized camera zoom.
 
 Expo exposes digital zoom as a normalized `0...1` percentage of the device's
-maximum, not an absolute optical multiplier. As a result, exact 2×/4× field of
+maximum, not an absolute optical multiplier. As a result, exact 2x/4x field of
 view varies by iPhone camera hardware. Production acceptance must test supported
 iPhone models and show only factors that can be delivered honestly on each
 device.
@@ -49,4 +49,3 @@ Before database work begins, every row above should have:
    applicable.
 3. An identified Supabase table/policy, native capability, or external service.
 4. An iOS acceptance test in the implementation checklist.
-

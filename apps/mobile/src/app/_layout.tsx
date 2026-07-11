@@ -11,6 +11,9 @@ export default function RootLayout() {
         <Stack.Screen name="login" options={{ presentation: 'modal', title: 'Welcome' }} />
         <Stack.Screen name="profile" options={{ title: 'You' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
+        <Stack.Screen name="journal" options={{ title: 'Your journal' }} />
+        <Stack.Screen name="taste-profile" options={{ title: 'Taste profile' }} />
+        <Stack.Screen name="dish" options={{ title: 'Dish details' }} />
         <Stack.Screen name="check-in" options={{ title: 'New bite' }} />
         <Stack.Screen name="restaurant" options={{ title: 'Choose restaurant' }} />
         <Stack.Screen name="review" options={{ title: 'Quick review' }} />
