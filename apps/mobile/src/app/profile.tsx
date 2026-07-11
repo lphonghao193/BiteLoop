@@ -19,6 +19,7 @@ export default function ProfileScreen() {
         <ListRow icon="people-outline" title="Circles" detail="Friends, Family, Coworkers" onPress={() => router.push('/circles')} />
         <ListRow icon="options-outline" title="Taste profile" detail="Dislikes, allergens, and dietary needs" onPress={() => router.push('/taste-profile')} />
         <ListRow icon="settings-outline" title="Settings" detail="Currency, privacy, notifications" onPress={() => router.push('/settings')} />
+        <ListRow icon="construct-outline" title="Prototype states" detail="Loading, empty, permissions, offline, and errors" onPress={() => router.push('/prototype-states')} />
       </Section>
       <ListRow danger icon="log-out-outline" title="Sign out" onPress={() => router.push('/login')} />
     </PrototypePage>

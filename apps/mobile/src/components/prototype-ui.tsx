@@ -44,6 +44,10 @@ export function PrimaryButton({ label, icon = 'arrow-forward', onPress, secondar
   return <Pressable accessibilityRole="button" onPress={onPress} style={[styles.button, secondary && styles.buttonSecondary]}><Ionicons color={secondary ? colors.ink : '#FFFFFF'} name={icon} size={20} /><Text style={[styles.buttonText, secondary && styles.buttonTextSecondary]}>{label}</Text></Pressable>;
 }
 
+export function DataStateCard({ icon, title, detail, actionLabel, onAction }: { icon: keyof typeof Ionicons.glyphMap; title: string; detail: string; actionLabel?: string; onAction?: () => void }) {
+  return <View style={styles.stateCard}><View style={styles.stateIcon}><Ionicons color={colors.primary} name={icon} size={25} /></View><Text style={styles.stateTitle}>{title}</Text><Text style={styles.stateDetail}>{detail}</Text>{actionLabel ? <Pressable accessibilityRole="button" onPress={onAction} style={styles.stateAction}><Text style={styles.stateActionText}>{actionLabel}</Text></Pressable> : null}</View>;
+}
+
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
   page: { gap: space.lg, padding: space.lg, paddingBottom: 48 },
@@ -69,4 +73,10 @@ const styles = StyleSheet.create({
   buttonSecondary: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1 },
   buttonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '800' },
   buttonTextSecondary: { color: colors.ink },
+  stateCard: { alignItems: 'center', backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 22, borderWidth: 1, gap: 8, padding: space.lg },
+  stateIcon: { alignItems: 'center', backgroundColor: colors.primarySoft, borderRadius: 24, height: 48, justifyContent: 'center', width: 48 },
+  stateTitle: { color: colors.ink, fontSize: 17, fontWeight: '800', textAlign: 'center' },
+  stateDetail: { color: colors.muted, fontSize: 13, lineHeight: 19, textAlign: 'center' },
+  stateAction: { borderColor: colors.primary, borderRadius: 999, borderWidth: 1, marginTop: 4, paddingHorizontal: 15, paddingVertical: 9 },
+  stateActionText: { color: colors.primary, fontSize: 13, fontWeight: '800' },
 });

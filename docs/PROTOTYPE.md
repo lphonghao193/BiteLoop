@@ -20,6 +20,7 @@ it does not imply persistence or production readiness.
 | Settings and currency | Profile -> Settings | Currency and notification controls | Persistence, exchange rates, permissions links |
 | Individual Decide | Decide tab | Price bands, result, explanation, reroll | Eligibility query, ranking, live hours, navigation |
 | Group Decide | Decide -> Decide with a group | Room and result states | Invitations, private constraints, intersection, voting |
+| Shared data states | Profile -> Prototype states | Loading, empty, permission, offline, and error patterns | Connect each pattern to repository/network state |
 
 ## Camera zoom behavior
 
