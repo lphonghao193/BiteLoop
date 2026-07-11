@@ -52,12 +52,20 @@ uses the resulting preference data to make better individual and group choices.
 
 ## Main navigation
 
-1. **Loop** — A visual feed of food and drink check-ins from selected circles.
-2. **Explore** — Nearby dishes, restaurants, menus, and trusted recommendations.
-3. **Check In** — A camera-first flow for recording a meal or drink.
-4. **Pick for Me** — A filtered food and drink randomizer.
-5. **Journal** — The user's check-in history, saved items, taste profile, and
-   food map.
+The app uses three stable top-level tabs:
+
+1. **Loop** — A visual feed of food and drink moments from trusted circles.
+2. **Capture** — The default home screen and camera-first check-in flow.
+3. **Decide** — The filtered Pick for Me food and drink assistant.
+
+Capture opens first because recording a meal is the app's most frequent and
+time-sensitive action. The camera is still launched only after an explicit tap,
+so the app does not surprise users with a permission prompt on startup.
+
+Explore is integrated into Loop and Decide through search and nearby results.
+Journal, saved dishes, Taste Profile, settings, and currency are secondary
+destinations reached from the profile or My bites controls rather than permanent
+tabs.
 
 ## Core features
 

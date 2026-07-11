@@ -22,7 +22,15 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "BiteLoop uses your photos so you can add food moments to your journal.",
+          "cameraPermission": "BiteLoop uses your camera so you can capture the food in front of you.",
+          "microphonePermission": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

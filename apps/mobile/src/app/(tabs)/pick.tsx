@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { Screen } from '@/components/Screen';
 import { DEFAULT_CURRENCY, priceBandsByCurrency } from '@/features/pricing/price-bands';
 import { colors, space } from '@/theme';
 
@@ -16,7 +16,11 @@ export default function PickScreen() {
   };
 
   return (
-    <Screen title="Pick for me" subtitle="Set the boundaries. BiteLoop handles the indecision.">
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <View style={styles.heroIcon}><Ionicons color={colors.accent} name="sparkles" size={28} /></View>
+        <Text style={styles.title}>What should we eat?</Text>
+        <Text style={styles.subtitle}>Set a few boundaries. BiteLoop will choose one strong option and explain why.</Text>
       <View style={styles.section}>
         <View>
           <Text style={styles.label}>BUDGET PER PERSON</Text>
@@ -39,14 +43,21 @@ export default function PickScreen() {
           })}
         </View>
         <Pressable style={styles.primaryButton}>
-          <Text style={styles.primaryButtonText}>Surprise me</Text>
+          <Ionicons color={colors.surface} name="shuffle" size={21} />
+          <Text style={styles.primaryButtonText}>Pick for me</Text>
         </Pressable>
       </View>
-    </Screen>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: colors.background },
+  content: { gap: space.md, padding: space.lg, paddingBottom: space.xl },
+  heroIcon: { alignItems: 'center', backgroundColor: '#DDEFE8', borderRadius: 25, height: 50, justifyContent: 'center', width: 50 },
+  title: { color: colors.ink, fontSize: 31, fontWeight: '800' },
+  subtitle: { color: colors.muted, fontSize: 15, lineHeight: 22, marginBottom: space.sm },
   section: { gap: space.md },
   label: { color: colors.ink, fontSize: 13, fontWeight: '800', letterSpacing: 1 },
   hint: { color: colors.muted, marginTop: 4 },
@@ -55,7 +66,6 @@ const styles = StyleSheet.create({
   chipActive: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
   chipText: { color: colors.ink, fontWeight: '600' },
   chipTextActive: { color: colors.primary },
-  primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 16, marginTop: space.sm, padding: space.md },
+  primaryButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 16, flexDirection: 'row', gap: space.sm, justifyContent: 'center', marginTop: space.sm, padding: space.md },
   primaryButtonText: { color: colors.surface, fontSize: 17, fontWeight: '800' },
 });
-

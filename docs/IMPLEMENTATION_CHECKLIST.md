@@ -52,18 +52,19 @@ configured.
 
 - [x] Use a physical iPhone with Expo Go as the first iOS test target.
 - [x] Align the project with Expo SDK 54 for Expo Go 54 compatibility.
-- [ ] Connect the iOS test target to containerized Metro.
-- [ ] Open the starter app successfully on iOS.
-- [ ] Verify all five tabs render on iOS.
-- [ ] Verify the VND price-band controls work on iOS.
+- [x] Connect the iOS test target to containerized Metro.
+- [x] Open the starter app successfully on iOS.
+- [ ] Verify Loop, Capture, and Decide render on iOS, with Capture opening first.
+- [ ] Take a photo and choose a library photo from the Capture home screen.
+- [x] Verify the VND price-band controls work on iOS.
 - [x] Record iOS 17.0 as the minimum supported product and deployment version.
 
 ### Foundation exit criteria
 
 - [x] A clean checkout can build the mobile container without host Node.js.
 - [x] Containerized typechecking passes.
-- [ ] Local Supabase is healthy and reachable from the iOS test target.
-- [ ] The starter app runs on iOS without runtime errors.
+- [x] Local Supabase is healthy and reachable from the iOS test target.
+- [ ] The redesigned camera-first app runs on iOS without runtime errors.
 
 Do not begin authentication until all Section 0 exit criteria pass.
 
