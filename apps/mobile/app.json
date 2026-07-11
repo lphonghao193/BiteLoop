@@ -9,7 +9,6 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "deploymentTarget": "17.0",
       "bundleIdentifier": "com.example.biteloop"
     },
     "android": {

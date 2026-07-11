@@ -51,6 +51,7 @@ configured.
 ### iOS-first development target
 
 - [x] Use a physical iPhone with Expo Go as the first iOS test target.
+- [x] Align the project with Expo SDK 54 for Expo Go 54 compatibility.
 - [ ] Connect the iOS test target to containerized Metro.
 - [ ] Open the starter app successfully on iOS.
 - [ ] Verify all five tabs render on iOS.

@@ -7,7 +7,8 @@ technology options. The checked-in Expo app is a provisional MVP scaffold, not
 an irreversible stack decision.
 
 The first development target is a physical iPhone running iOS 17 or newer. The
-iOS deployment target is set to 17.0 in the Expo application configuration.
+project uses Expo SDK 54 for compatibility with Expo Go 54. The production iOS
+deployment target will be enforced as 17.0 when native preview builds are added.
 
 ## Repository layout
 

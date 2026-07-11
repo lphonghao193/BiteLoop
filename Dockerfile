@@ -4,6 +4,7 @@ WORKDIR /workspace
 
 COPY package.json ./
 COPY package-lock.json ./
+COPY .gitignore ./
 COPY apps/mobile/package.json ./apps/mobile/package.json
 RUN npm ci
 
