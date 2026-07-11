@@ -2,12 +2,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import { useRef, useState } from 'react';
-import { Alert, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useMemo, useRef, useState } from 'react';
+import { Alert, Image, PanResponder, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { colors, space } from '@/theme';
 
-type ZoomPreset = 0.5 | 1 | 2 | 4;
+const ZOOM_TRACK_WIDTH = 240;
+const normalizeLensName = (lens: string) => lens.toLowerCase().replace(/[^a-z]/g, '');
 
 export default function CaptureScreen() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function CaptureScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraOpen, setCameraOpen] = useState(false);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-  const [zoomPreset, setZoomPreset] = useState<ZoomPreset>(1);
+  const [zoomFactor, setZoomFactor] = useState(1);
   const [lenses, setLenses] = useState<string[]>([]);
   const [selectedLens, setSelectedLens] = useState<string | undefined>();
   const [flash, setFlash] = useState<'off' | 'on'>('off');
@@ -30,23 +31,23 @@ export default function CaptureScreen() {
     setCameraOpen(true);
   };
 
-  const selectZoom = (preset: ZoomPreset) => {
-    const ultraWide = lenses.find((lens) => lens.toLowerCase().includes('ultrawide'));
-    const wide = lenses.find((lens) => lens.toLowerCase().includes('wideangle'));
-    const telephoto = lenses.find((lens) => lens.toLowerCase().includes('telephoto'));
-
-    if (preset === 0.5 && !ultraWide) {
-      Alert.alert('0.5× is unavailable', 'This iPhone did not report an ultra-wide lens to BiteLoop.');
-      return;
-    }
-
-    setZoomPreset(preset);
-    if (preset === 0.5) setSelectedLens(ultraWide);
-    else if (preset >= 2 && telephoto) setSelectedLens(telephoto);
-    else setSelectedLens(wide);
+  const ultraWide = lenses.find((lens) => normalizeLensName(lens).includes('ultrawide'));
+  const wide = lenses.find((lens) => normalizeLensName(lens).includes('wideangle') && !normalizeLensName(lens).includes('ultrawide'));
+  const minimumZoom = ultraWide ? 0.5 : 1;
+  const setZoomFromPosition = (position: number) => {
+    const progress = Math.max(0, Math.min(1, position / ZOOM_TRACK_WIDTH));
+    const factor = minimumZoom + progress * (5 - minimumZoom);
+    setZoomFactor(factor);
+    setSelectedLens(factor < 1 && ultraWide ? ultraWide : wide);
   };
-
-  const normalizedZoom = zoomPreset === 4 ? 0.55 : zoomPreset === 2 && !selectedLens?.toLowerCase().includes('telephoto') ? 0.2 : 0;
+  const zoomPanResponder = useMemo(() => PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderGrant: (event) => setZoomFromPosition(event.nativeEvent.locationX),
+    onPanResponderMove: (event) => setZoomFromPosition(event.nativeEvent.locationX),
+  }), [minimumZoom, ultraWide, wide]);
+  const normalizedZoom = zoomFactor < 1 ? 0 : Math.min(1, (zoomFactor - 1) / 7);
+  const zoomProgress = (zoomFactor - minimumZoom) / (5 - minimumZoom);
 
   const capture = async () => {
     const picture = await cameraRef.current?.takePictureAsync({ quality: 0.85, shutterSound: true });
@@ -68,7 +69,11 @@ export default function CaptureScreen() {
           autofocus="on"
           facing="back"
           flash={flash}
-          onAvailableLensesChanged={(event) => setLenses(event.lenses)}
+          onAvailableLensesChanged={(event) => {
+            setLenses(event.lenses);
+            const defaultWide = event.lenses.find((lens) => normalizeLensName(lens).includes('wideangle') && !normalizeLensName(lens).includes('ultrawide'));
+            setSelectedLens((current) => current ?? defaultWide);
+          }}
           ref={cameraRef}
           selectedLens={selectedLens}
           style={StyleSheet.absoluteFill}
@@ -81,11 +86,13 @@ export default function CaptureScreen() {
             <Pressable accessibilityLabel="Toggle flash" onPress={() => setFlash((value) => value === 'off' ? 'on' : 'off')} style={styles.darkControl}><Ionicons color="#FFF" name={flash === 'on' ? 'flash' : 'flash-off'} size={21} /></Pressable>
           </View>
           <View style={styles.cameraBottom}>
-            <View style={styles.zoomRow}>
-              {([0.5, 1, 2, 4] as ZoomPreset[]).map((preset) => {
-                const disabled = preset === 0.5 && lenses.length > 0 && !lenses.some((lens) => lens.toLowerCase().includes('ultrawide'));
-                return <Pressable key={preset} onPress={() => selectZoom(preset)} style={[styles.zoomButton, zoomPreset === preset && styles.zoomButtonActive, disabled && styles.zoomDisabled]}><Text style={[styles.zoomText, zoomPreset === preset && styles.zoomTextActive]}>{preset}×</Text></Pressable>;
-              })}
+            <View style={styles.zoomControl}>
+              <Text style={styles.zoomValue}>{zoomFactor.toFixed(1)}×</Text>
+              <View accessibilityLabel={`Camera zoom ${zoomFactor.toFixed(1)} times`} accessibilityRole="adjustable" style={styles.zoomTrack} {...zoomPanResponder.panHandlers}>
+                <View style={[styles.zoomFill, { width: `${zoomProgress * 100}%` }]} />
+                <View style={[styles.zoomThumb, { left: zoomProgress * ZOOM_TRACK_WIDTH - 11 }]} />
+              </View>
+              <View style={styles.zoomLabels}><Text style={styles.zoomLabel}>{minimumZoom.toFixed(1)}×</Text><Text style={styles.zoomHint}>Drag to zoom</Text><Text style={styles.zoomLabel}>5.0×</Text></View>
             </View>
             <View style={styles.shutterRow}>
               <Pressable accessibilityLabel="Choose from photo library" onPress={choosePhoto} style={styles.sideControl}><Ionicons color="#FFF" name="images-outline" size={24} /></Pressable>
@@ -124,6 +131,6 @@ const styles = StyleSheet.create({
   promptRow: { alignItems: 'center', flexDirection: 'row', gap: space.sm, justifyContent: 'center', paddingHorizontal: space.md }, promptText: { color: colors.muted, flex: 1, fontSize: 13, lineHeight: 19 },
   nextCard: { alignItems: 'center', backgroundColor: colors.ink, borderRadius: 22, flexDirection: 'row', gap: space.md, padding: space.md }, nextCopy: { flex: 1 }, nextTitle: { color: '#FFF', fontSize: 17, fontWeight: '800' }, nextBody: { color: '#D9CFC9', fontSize: 13, lineHeight: 18, marginTop: 3 }, nextButton: { alignItems: 'center', backgroundColor: colors.primary, borderRadius: 22, height: 44, justifyContent: 'center', width: 44 },
   cameraScreen: { backgroundColor: '#000', flex: 1 }, cameraOverlay: { flex: 1, justifyContent: 'space-between' }, cameraTopBar: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', padding: space.md }, cameraPrompt: { color: '#FFF', fontSize: 15, fontWeight: '800', textShadowColor: '#000', textShadowRadius: 6 }, darkControl: { alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.48)', borderRadius: 22, height: 44, justifyContent: 'center', width: 44 },
-  cameraBottom: { backgroundColor: 'rgba(0,0,0,0.42)', gap: 22, paddingBottom: 24, paddingHorizontal: space.lg, paddingTop: 16 }, zoomRow: { alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.48)', borderRadius: 22, flexDirection: 'row', gap: 5, padding: 4 }, zoomButton: { alignItems: 'center', borderRadius: 18, height: 36, justifyContent: 'center', width: 45 }, zoomButtonActive: { backgroundColor: '#FFF' }, zoomDisabled: { opacity: 0.35 }, zoomText: { color: '#FFF', fontSize: 13, fontWeight: '800' }, zoomTextActive: { color: colors.ink },
+  cameraBottom: { backgroundColor: 'rgba(0,0,0,0.42)', gap: 22, paddingBottom: 24, paddingHorizontal: space.lg, paddingTop: 16 }, zoomControl: { alignItems: 'center', alignSelf: 'center', gap: 7 }, zoomValue: { color: '#FFD36A', fontSize: 16, fontWeight: '900' }, zoomTrack: { backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 4, height: 24, justifyContent: 'center', width: ZOOM_TRACK_WIDTH }, zoomFill: { backgroundColor: '#FFD36A', borderRadius: 2, height: 4 }, zoomThumb: { backgroundColor: '#FFD36A', borderColor: '#FFF', borderRadius: 11, borderWidth: 2, height: 22, position: 'absolute', width: 22 }, zoomLabels: { flexDirection: 'row', justifyContent: 'space-between', width: ZOOM_TRACK_WIDTH }, zoomLabel: { color: '#FFF', fontSize: 11, fontWeight: '700' }, zoomHint: { color: 'rgba(255,255,255,0.75)', fontSize: 11, fontWeight: '700' },
   shutterRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around' }, shutter: { alignItems: 'center', borderColor: '#FFF', borderRadius: 39, borderWidth: 4, height: 78, justifyContent: 'center', width: 78 }, shutterInner: { backgroundColor: '#FFF', borderRadius: 31, height: 62, width: 62 }, sideControl: { alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.52)', borderRadius: 24, height: 48, justifyContent: 'center', width: 48 },
 });

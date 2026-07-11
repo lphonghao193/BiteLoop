@@ -28,16 +28,14 @@ it does not imply persistence or production readiness.
 reports physical iOS lenses through `onAvailableLensesChanged` and accepts a
 specific lens through `selectedLens`.
 
-- **0.5x** selects the reported ultra-wide lens. The control is disabled when
-  the device does not expose one.
-- **1x** selects the wide-angle lens at zero digital zoom.
-- **2x** prefers a reported telephoto lens; otherwise it applies moderate zoom
-  to the wide lens.
-- **4x** uses the selected telephoto/wide lens plus normalized camera zoom.
+- The camera uses a continuous draggable zoom control instead of preset buttons.
+- The minimum is **0.5x** when iOS reports an ultra-wide lens, otherwise **1x**.
+- Dragging across 1x switches between the reported ultra-wide and wide lenses.
+- Above 1x, the control maps continuously onto Expo's normalized digital zoom.
 
 Expo exposes digital zoom as a normalized `0...1` percentage of the device's
-maximum, not an absolute optical multiplier. As a result, exact 2x/4x field of
-view varies by iPhone camera hardware. Production acceptance must test supported
+maximum, not an absolute optical multiplier. As a result, the displayed factor
+is an interaction guide rather than an exact optical multiplier. Production acceptance must test supported
 iPhone models and show only factors that can be delivered honestly on each
 device.
 
