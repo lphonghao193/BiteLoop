@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "BiteLoop",
+    "slug": "biteloop",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "biteloop",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "deploymentTarget": "17.0",
+      "bundleIdentifier": "com.example.biteloop"
+    },
+    "android": {
+      "package": "com.example.biteloop",
+      "adaptiveIcon": {
+        "backgroundColor": "#FFF7ED"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

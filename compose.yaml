@@ -1,0 +1,30 @@
+name: biteloop
+
+services:
+  mobile:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      EXPO_PUBLIC_SUPABASE_URL: ${EXPO_PUBLIC_SUPABASE_URL:-http://host.docker.internal:54321}
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY:-}
+      EXPO_PUBLIC_GOONG_MAPTILES_KEY: ${EXPO_PUBLIC_GOONG_MAPTILES_KEY:-}
+      REACT_NATIVE_PACKAGER_HOSTNAME: ${EXPO_PACKAGER_HOSTNAME:?Set EXPO_PACKAGER_HOSTNAME in .env.docker to the computer LAN IP}
+      EXPO_NO_TELEMETRY: "1"
+      WATCHPACK_POLLING: "true"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8081:8081"
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    volumes:
+      - ./apps/mobile/src:/workspace/apps/mobile/src
+      - ./apps/mobile/app.json:/workspace/apps/mobile/app.json:ro
+      - mobile_node_modules:/workspace/node_modules
+    stdin_open: true
+    tty: true
+
+volumes:
+  mobile_node_modules:

@@ -1,0 +1,19 @@
+{
+  "name": "biteloop",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "start": "npm --workspace @biteloop/mobile run start",
+    "android": "npm --workspace @biteloop/mobile run android",
+    "ios": "npm --workspace @biteloop/mobile run ios",
+    "web": "npm --workspace @biteloop/mobile run web",
+    "typecheck": "npm --workspace @biteloop/mobile run typecheck"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
+

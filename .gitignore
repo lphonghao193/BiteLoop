@@ -1,0 +1,14 @@
+node_modules/
+.expo/
+dist/
+web-build/
+.env
+.env.local
+.env.docker
+*.log
+.DS_Store
+Thumbs.db
+android/
+ios/
+coverage/
+.tools/
